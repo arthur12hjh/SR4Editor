@@ -31,7 +31,15 @@ private:
 	CTransform*				m_pTransformCom = { nullptr };	
 	CVIBuffer_Terrain*		m_pVIBufferCom = { nullptr };
 
-	
+	class CTerrainVertexData*	m_pVertexDataObject = { nullptr };
+	class CImGui_Manager*		m_pImGui_Manager = { nullptr };
+
+public:
+	void SetMapEditor();
+	void SaveVertexData();
+	void LoadVertexData();
+	void ApplyVertexData(TERRAINDATATYPE_DESC dataDesc);
+
 private:
 	HRESULT Ready_Components();
 

@@ -23,8 +23,7 @@ HRESULT CDataObject::Initialize(void* pArg)
 
 HRESULT CDataObject::ReadFile(const _wstring& strFileTag)
 {
-	m_pGameInstance->ReadFile(&m_listStrData, TEXT("../Bin/Resources/Data/test.csv"));
-
+	m_pGameInstance->ReadFile(&m_listStrData, strFileTag);
 	// for (auto iter : m_listStrData)
 	// {
 	// 	const WCHAR* debugStr = iter.c_str();
@@ -32,6 +31,11 @@ HRESULT CDataObject::ReadFile(const _wstring& strFileTag)
 	// }
 
 	return S_OK;
+}
+
+void CDataObject::WriteFile(const _wstring& strFileTag)
+{
+	m_pGameInstance->WriteFile(&m_listStrData, strFileTag);
 }
 
 void CDataObject::Free()

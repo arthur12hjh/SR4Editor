@@ -30,7 +30,13 @@ namespace Engine
 		D3DXVECTOR3			vPosition;
 		D3DXVECTOR3			vTexcoord;
 	}VTXCUBE;
-	
+
+	typedef struct TerrainDataTypeDesc
+	{
+		unsigned int		iVertexPositionX;
+		unsigned int		iVertexPositionZ;
+		D3DXVECTOR3			vPosition;
+	}TERRAINDATATYPE_DESC;
 }
 
 

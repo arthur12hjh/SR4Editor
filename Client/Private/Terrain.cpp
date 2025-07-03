@@ -1,9 +1,12 @@
 #include "Terrain.h"
+#include "TerrainVertexData.h"
+#include "ImGui_Manager.h"
 
 #include "GameInstance.h"
 
 CTerrain::CTerrain(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject { pGraphic_Device }
+	, m_pImGui_Manager { CImGui_Manager::GetInstance() }
 {
 
 }
@@ -24,12 +27,18 @@ HRESULT CTerrain::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
+	m_pVertexDataObject = static_cast<CTerrainVertexData*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::EDITOR), TEXT("Layer_Data")));
+
+	m_pVIBufferCom->Apply_TerrainData(m_pVertexDataObject->Get_Data());
+
+	m_pVertexDataObject->Set_Terrain(m_pVIBufferCom);
+
 	return S_OK;
 }
 
 void CTerrain::Priority_Update(_float fTimeDelta)
 {
-	
+	SetMapEditor();
 }
 
 void CTerrain::Update(_float fTimeDelta)
@@ -40,7 +49,6 @@ void CTerrain::Update(_float fTimeDelta)
 		if (m_pVIBufferCom->Picking(m_pTransformCom, &vPickPos))
 			int a = 10;
 	}*/
-	
 }
 
 
@@ -60,7 +68,67 @@ HRESULT CTerrain::Render()
 
 	m_pVIBufferCom->Render();
 
+	//m_pGraphic_Device->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+
+
 	return S_OK;
+}
+
+void CTerrain::SetMapEditor()
+{
+	ImGui::Begin(u8"맵 에디터", NULL, ImGuiWindowFlags_MenuBar);
+
+	if (ImGui::BeginMenuBar())
+	{
+		if (ImGui::BeginMenu("File"))
+		{
+			if (ImGui::MenuItem("Save", "Ctrl+S"))
+				SaveVertexData();
+			ImGui::Separator();
+			if (ImGui::MenuItem("Open", "Ctrl+O"))
+				LoadVertexData();
+			ImGui::EndMenu();
+		}
+
+		ImGui::EndMenuBar();
+	}
+
+	static _float3 position = _float3(500.f, 500.f, 500.f);
+	ImGui::InputFloat3(u8"정점 위치", position);
+	static int idx[2] = { 0, 0 };
+	ImGui::InputInt2(u8"인덱스", idx);
+
+	ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::ImColor(0.7f, 0.7f, 0.7f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::ImColor(0.6f, 0.6f, 0.6f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::ImColor(0.f, 0.f, 0.f));
+
+	if (ImGui::Button(u8"정점 적용"))
+	{
+		TERRAINDATATYPE_DESC dataTmp;
+		dataTmp.iVertexPositionX = idx[0];
+		dataTmp.iVertexPositionZ = idx[1];
+		dataTmp.vPosition = position;
+		ApplyVertexData(dataTmp);
+	}
+	ImGui::PopStyleColor(3);
+
+
+	ImGui::End();
+}
+
+
+void CTerrain::SaveVertexData()
+{
+	m_pVertexDataObject->Save_Data();
+}
+
+void CTerrain::LoadVertexData()
+{
+}
+
+void CTerrain::ApplyVertexData(TERRAINDATATYPE_DESC dataDesc)
+{
+	m_pVertexDataObject->Set_Data(dataDesc);
 }
 
 HRESULT CTerrain::Ready_Components()
@@ -72,12 +140,12 @@ HRESULT CTerrain::Ready_Components()
 		return E_FAIL;
 
 	/* Com_Texture */
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_Component_Texture_Terrain"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::EDITOR), TEXT("Prototype_Component_Texture_Terrain"),
 		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
 		return E_FAIL;
 
 	/* Com_VIBuffer */
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Terrain"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::EDITOR), TEXT("Prototype_Component_VIBuffer_Terrain"),
 		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
 		return E_FAIL;	
 

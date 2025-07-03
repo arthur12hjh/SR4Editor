@@ -40,9 +40,26 @@ HRESULT CFileReader::ReadFile(list<_wstring>* strDataList, const _wstring& strFi
 				strDataList->push_back(wstrTemp);
 			}
 		}
+		file.close();
 	}
 
 
+	return S_OK;
+}
+
+HRESULT CFileReader::WriteFile(list<_wstring>* strDataList, const _wstring& strFileTag)
+{
+	string strStream;
+	ofstream file;
+	file.open(strFileTag);
+
+	for (auto& pStr : *strDataList)
+	{
+		string strStream =string().assign(pStr.begin(), pStr.end());
+		file.write(strStream.c_str(), pStr.size());
+	}
+		
+	file.close();
 
 	return S_OK;
 }

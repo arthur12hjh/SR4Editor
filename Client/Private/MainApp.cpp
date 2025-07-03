@@ -1,6 +1,7 @@
 #include "MainApp.h"
 
 #include "GameInstance.h"
+#include "ImGui_Manager.h"
 
 #include "Level_Loading.h"
 #include "Camera.h"
@@ -9,10 +10,10 @@
 
 Client::CMainApp::CMainApp()	
 	: m_pGameInstance { CGameInstance::GetInstance() }
+	, m_pImGui_Manager{ CImGui_Manager::GetInstance() }
 {
-	
-
 	Safe_AddRef(m_pGameInstance);
+	Safe_AddRef(m_pImGui_Manager);
 }
 
 HRESULT Client::CMainApp::Initialize()
@@ -34,13 +35,17 @@ HRESULT Client::CMainApp::Initialize()
 		return E_FAIL;
 
 	if (FAILED(Start_Level(LEVEL::LOGO)))
-		return E_FAIL;	
+		return E_FAIL;
+
+	m_pImGui_Manager->Initialize(m_pGraphic_Device, g_hWnd);
 
 	return S_OK;
 }
 
 void Client::CMainApp::Update(_float fTimeDelta)
 {
+	m_pImGui_Manager->Priority_Update(fTimeDelta);
+
 	m_pGameInstance->Update_Engine(fTimeDelta);
 }
 
@@ -48,7 +53,10 @@ HRESULT Client::CMainApp::Render()
 {
 	m_pGameInstance->Render_Begin(D3DXCOLOR(0.f, 0.f, 1.f, 1.f));
 
+
 	m_pGameInstance->Draw();
+
+	m_pImGui_Manager->Render();
 
 	m_pGameInstance->Render_End();
 
@@ -99,6 +107,11 @@ HRESULT CMainApp::Ready_Prototypes()
 		CCamera::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_CameraEditor */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_GameObject_CameraEditor"),
+		CCameraEditor::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
 	/* For.Prototype_Component_Font */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::STATIC), TEXT("Prototype_Component_Font"),
 		CFont::Create(m_pGraphic_Device))))
@@ -126,7 +139,9 @@ void Client::CMainApp::Free()
 
 	Safe_Release(m_pGraphic_Device);
 
-	m_pGameInstance->Release_Engine();
+	m_pImGui_Manager->DestroyInstance();
+	Safe_Release(m_pImGui_Manager);
 
-	Safe_Release(m_pGameInstance);	
+	m_pGameInstance->Release_Engine();
+	Safe_Release(m_pGameInstance);
 }

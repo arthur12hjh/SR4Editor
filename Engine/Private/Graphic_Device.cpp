@@ -57,6 +57,7 @@ HRESULT CGraphic_Device::Ready_GraphicDev(HWND hWnd, WINMODE eMode, _uint iSizeX
     d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
 
 
+
     if (FAILED(m_pSDK->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd, dwFlag, &d3dpp, &m_pGraphicDev)))
         return E_FAIL;
 

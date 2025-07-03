@@ -6,7 +6,6 @@
 
 CLevel_GamePlay::CLevel_GamePlay(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevelID)
 	: CLevel { pGraphic_Device, ENUM_CLASS(eLevelID)}
-	
 {
 
 }
@@ -159,8 +158,9 @@ HRESULT CLevel_GamePlay::Ready_Sounds()
 
 HRESULT CLevel_GamePlay::Ready_Layer_Data(const _wstring& strLayerTag)
 {
+	_wstring strFileName = TEXT("../Bin/Resources/Data/test.csv");
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::GAMEPLAY), TEXT("Prototype_GameObject_TestLevelData"),
-		ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag)))
+		ENUM_CLASS(LEVEL::GAMEPLAY), strLayerTag, static_cast<void*>(&strFileName))))
 		return E_FAIL;
 
 	return S_OK;

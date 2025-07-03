@@ -17,9 +17,16 @@ public:
 	virtual HRESULT Render() override;
 
 private:
+	HRESULT Ready_Lights();
 	HRESULT Ready_Layer_Data(const _wstring& strLayerTag);
 	HRESULT Ready_Layer_BackGround(const _wstring& strLayerTag);
 	HRESULT Ready_Layer_Camera(const _wstring& strLayerTag);
+
+private:
+
+private:
+	class CImGui_Manager* m_pImGui_Manager = { nullptr };
+	wstring* strTerrainVertexDataFileName = { nullptr };
 
 public:
 	static CLevel_Editor* Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevelID);

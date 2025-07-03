@@ -22,6 +22,7 @@ public:
 
 private:
 	CGameInstance*		m_pGameInstance = { nullptr };
+	class CImGui_Manager* m_pImGui_Manager = { nullptr };
 	LPDIRECT3DDEVICE9	m_pGraphic_Device = { nullptr };
 
 private:

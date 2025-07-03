@@ -33,7 +33,7 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, LPDIRECT
 	m_pTimer_Manager = CTimer_Manager::Create();
 	if (nullptr == m_pTimer_Manager)
 		return E_FAIL;
-
+		
 	m_pPrototype_Manager = CPrototype_Manager::Create(EngineDesc.iNumLevels);
 	if (nullptr == m_pPrototype_Manager)
 		return E_FAIL;
@@ -428,6 +428,11 @@ void CGameInstance::Manager_SetChannelVolume(CHANNELID eID, float fVolume)
 HRESULT CGameInstance::ReadFile(list<_wstring>* strDataList, const _wstring& strFileTag)
 {
 	return m_pFileReader->ReadFile(strDataList, strFileTag);
+}
+
+HRESULT CGameInstance::WriteFile(list<_wstring>* strDataList, const _wstring& strFileTag)
+{
+	return m_pFileReader->WriteFile(strDataList, strFileTag);
 }
 
 #pragma endregion
