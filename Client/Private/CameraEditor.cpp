@@ -27,7 +27,7 @@ HRESULT CCameraEditor::Initialize(void* pArg)
 	if (FAILED(Ready_Components(pArg)))
 		return E_FAIL;
 
-	/* 카메라의 월드 상태를 트랜스폼 ㅋㅓㅁ포넌트에게 동기화한다.  */
+	/* 카메라의 월드 상태를 트랜스폼 컴포넌트에게 동기화한다.  */
 	/* 뷰스페이스 변환행렬을 구한다. */
 	/*D3DXMatrixLookAtLH();*/
 	m_pTransformCom->Set_State(STATE::POSITION, pDesc->vEye);
@@ -36,8 +36,6 @@ HRESULT CCameraEditor::Initialize(void* pArg)
 	/* 투영스페이스 변환행렬 */
 	D3DXMatrixPerspectiveFovLH(&m_ProjMatrix, m_fFov, m_fAspect, m_fNear, m_fFar);
 
-	m_matWorld = *m_pTransformCom->Get_WorldMatrixPtr();
-
 	POINT		ptMouse{};
 
 	GetCursorPos(&ptMouse);
@@ -45,6 +43,8 @@ HRESULT CCameraEditor::Initialize(void* pArg)
 	ScreenToClient(g_hWnd, &ptMouse);
 
 	m_vOldMouse = _float2(ptMouse.x, ptMouse.y);
+
+	m_pTransformCom->Set_State(STATE::POSITION, _float3(0, 15, -5));
 
 	return S_OK;
 }
@@ -55,7 +55,6 @@ void CCameraEditor::Priority_Update(_float fTimeDelta)
 	m_pGraphic_Device->SetTransform(D3DTS_VIEW, m_pTransformCom->Get_WorldMatrixInvPtr());
 	m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, D3DXMatrixPerspectiveFovLH(&m_ProjMatrix, m_fFov, m_fAspect, m_fNear, m_fFar));
 
-	m_pTransformCom->Set_WorldMatrix(m_matWorld);
 }
 
 void CCameraEditor::Update(_float fTimeDelta)
@@ -66,17 +65,20 @@ void CCameraEditor::Update(_float fTimeDelta)
 
 	ScreenToClient(g_hWnd, &ptMouse);
 
-	_float			fMove = {};
 
-
-	if (fMove = ptMouse.x - m_vOldMouse.x)
+	if (m_pGameInstance->Key_Pressing(VK_MBUTTON))
 	{
-		m_pTransformCom->Turn(_float3(0.f, 1.f, 0.f), fTimeDelta * fMove * m_fSensor);
-	}
+		_float			fMove = {};
 
-	if (fMove = ptMouse.y - m_vOldMouse.y)
-	{
-		m_pTransformCom->Turn(m_pTransformCom->Get_State(STATE::RIGHT), fTimeDelta * fMove * m_fSensor);
+		if (fMove = ptMouse.x - m_vOldMouse.x)
+		{
+			m_pTransformCom->Turn(_float3(0.f, 1.f, 0.f), fTimeDelta * fMove * m_fSensor);
+		}
+
+		if (fMove = ptMouse.y - m_vOldMouse.y)
+		{
+			m_pTransformCom->Turn(m_pTransformCom->Get_State(STATE::RIGHT), fTimeDelta * fMove * m_fSensor);
+		}
 	}
 
 	if (m_pGameInstance->Key_Pressing('W'))
@@ -104,6 +106,7 @@ void CCameraEditor::Update(_float fTimeDelta)
 		m_pTransformCom->Go_Down(fTimeDelta);
 	}
 
+	m_vOldMouse = _float2(ptMouse.x, ptMouse.y);
 }
 
 void CCameraEditor::Late_Update(_float fTimeDelta)

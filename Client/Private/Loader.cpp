@@ -16,6 +16,7 @@
 #pragma region DATA&COMPONENT
 
 #include "TestLevelData.h"
+#include "TerrainVertexData.h"
 #include "Animation.h"
 
 #pragma endregion
@@ -87,6 +88,9 @@ HRESULT CLoader::Loading()
 		break;
 	case LEVEL::GAMEPLAY:
 		hr = Loading_For_GamePlay();
+		break;
+	case LEVEL::EDITOR:
+		hr = Loading_For_Editor();
 		break;
 	}
 
@@ -502,6 +506,88 @@ HRESULT CLoader::Loading_For_GamePlay()
 	m_isFinished = true;
 
 	return S_OK;
+}
+
+HRESULT CLoader::Loading_For_Editor()
+{
+
+	m_strMessage = TEXT("데이터를(을) 로딩 중 입니다.");
+	/* For.Prototype_GameObject_TerrainVertexData*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDITOR), TEXT("Prototype_GameObject_TerrainVertexData"),
+		CTerrainVertexData::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+
+#pragma region Texture
+
+	m_strMessage = TEXT("텍스쳐를(을) 로딩 중 입니다.");
+	/* For.Prototype_Component_Texture_Terrain */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDITOR), TEXT("Prototype_Component_Texture_Terrain"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::PLANE, TEXT("../Bin/Resources/Textures/Terrain/Sprite_Snow_Tile.png"), 1))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_Sky */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDITOR), TEXT("Prototype_Component_Texture_Sky"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::CUBE, TEXT("../Bin/Resources/Textures/SkyBox/Sky_%d.dds"), 4))))
+		return E_FAIL;
+
+
+#pragma endregion
+
+
+
+#pragma region Model
+
+	m_strMessage = TEXT("모델를(을) 로딩 중 입니다.");
+	/* For.Prototype_Component_VIBuffer_Terrain */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDITOR), TEXT("Prototype_Component_VIBuffer_Terrain"),
+		CVIBuffer_Terrain::Create(m_pGraphic_Device, 100, 100))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_VIBuffer_Cube */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDITOR), TEXT("Prototype_Component_VIBuffer_Cube"),
+		CVIBuffer_Cube::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_VIBuffer_Right*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDITOR), TEXT("Prototype_Component_VIBuffer_Right"),
+		CVIBuffer_Right::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_VIBuffer_Top*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDITOR), TEXT("Prototype_Component_VIBuffer_Top"),
+		CVIBuffer_Top::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+
+#pragma endregion
+
+#pragma region Function
+
+#pragma endregion
+
+#pragma region Shader
+
+	m_strMessage = TEXT("셰이더를(을) 로딩 중 입니다.");
+
+#pragma endregion
+
+#pragma region Prototype
+
+	m_strMessage = TEXT("객체원형를(을) 로딩 중 입니다.");
+	/* For.Prototype_GameObject_Terrain */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDITOR), TEXT("Prototype_GameObject_Terrain"),
+		CTerrain::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Sky */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::EDITOR), TEXT("Prototype_GameObject_Sky"),
+		CSky::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	m_strMessage = TEXT("로딩이 완료되었습니다..");
+
+	m_isFinished = true;
 }
 
 CLoader* CLoader::Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eNextLevelID)

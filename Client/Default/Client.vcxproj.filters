@@ -136,6 +136,12 @@
     <Filter Include="02.GameObjects\Camera\EditorCamera">
       <UniqueIdentifier>{1a156f9d-5313-408c-9695-a0878b2c832c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.Manager">
+      <UniqueIdentifier>{80e92fcd-6623-49d8-9b6f-270d11f2c0c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Manager\00.ImGui">
+      <UniqueIdentifier>{5071c9b8-4a9f-4fdb-a1e1-e619816f72f7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -240,6 +246,12 @@
     <ClInclude Include="..\Public\CameraEditor.h">
       <Filter>02.GameObjects\Camera\EditorCamera</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\ImGui_Manager.h">
+      <Filter>04.Manager\00.ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\TerrainVertexData.h">
+      <Filter>02.GameObjects\DataObjects\MapData\TerrainVertexData</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -341,6 +353,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\CameraEditor.cpp">
       <Filter>02.GameObjects\Camera\EditorCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ImGui_Manager.cpp">
+      <Filter>04.Manager\00.ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\TerrainVertexData.cpp">
+      <Filter>02.GameObjects\DataObjects\MapData\TerrainVertexData</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

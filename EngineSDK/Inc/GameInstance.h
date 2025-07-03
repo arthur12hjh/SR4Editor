@@ -129,6 +129,7 @@ public:
 #pragma region FILEREADER
 
 	HRESULT ReadFile(list<_wstring>* strDataList, const _wstring& strFileTag);
+	HRESULT WriteFile(list<_wstring>* strDataList, const _wstring& strFileTag);
 
 #pragma endregion
 

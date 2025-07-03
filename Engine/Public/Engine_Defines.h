@@ -4,6 +4,7 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 
+#include <iostream>
 #include <vector>
 #include <list>
 #include <map>
@@ -22,8 +23,8 @@ using namespace std;
 
 // IMGUI
 #include "imgui.h"
-#include "imgui_impl_dx9.h"
 #include "imgui_impl_win32.h"	
+#include "imgui_impl_dx9.h"
 
 #include "Engine_Enum.h"
 #include "Engine_Macro.h"

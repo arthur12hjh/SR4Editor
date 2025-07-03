@@ -21,7 +21,7 @@ HRESULT CVIBuffer_Terrain::Initialize_Prototype(_uint iNumVerticesX, _uint iNumV
 
 	m_pVertexPositions = new _float3[m_iNumVertices];
 
-	m_iVertexStride = sizeof(VTXPOSTEX);
+	m_iVertexStride = sizeof(VTXNORTEX);
 	m_iFVF = D3DFVF_XYZ | D3DFVF_TEX1 | D3DFVF_TEXCOORDSIZE2(0);
 	m_ePrimitiveType = D3DPT_TRIANGLELIST;	
 	m_iNumPrimitive = (m_iNumVerticesX - 1) * (m_iNumVerticesZ - 1) * 2;	
@@ -40,7 +40,7 @@ HRESULT CVIBuffer_Terrain::Initialize_Prototype(_uint iNumVerticesX, _uint iNumV
 	if (FAILED(m_pGraphic_Device->CreateVertexBuffer(m_iNumVertices * m_iVertexStride, 0, m_iFVF, D3DPOOL_MANAGED, &m_pVB, nullptr)))
 		return E_FAIL;	
 
-	VTXPOSTEX* pVertices = { nullptr };
+	VTXNORTEX* pVertices = { nullptr };
 
 	/* 할당한 공간에 접근하여 값을 기록하낟. */
 	m_pVB->Lock(0, /*m_iNumVertices * m_iVertexStride*/0, reinterpret_cast<void**>(&pVertices), 0);
@@ -52,6 +52,7 @@ HRESULT CVIBuffer_Terrain::Initialize_Prototype(_uint iNumVerticesX, _uint iNumV
 			_uint	iIndex = i * m_iNumVerticesX + j;
 
 			pVertices[iIndex].vPosition = m_pVertexPositions[iIndex] = _float3(j, 0.f, i);
+			pVertices[iIndex].vNormal = _float3(0.f, 0.f, 0.f);
 			pVertices[iIndex].vTexcoord = _float2(j / (m_iNumVerticesX - 1.f) * 50.f, i / (m_iNumVerticesZ - 1.f) * 50.f);
 		}
 	}
@@ -227,6 +228,24 @@ HRESULT CVIBuffer_Terrain::Initialize_Prototype(const _tchar* pHeightFilePath)
 
 HRESULT CVIBuffer_Terrain::Initialize(void* pArg)
 {
+	return S_OK;
+}
+
+HRESULT CVIBuffer_Terrain::Apply_TerrainData(list<Engine::TERRAINDATATYPE_DESC> ListData)
+{
+	VTXNORTEX* pVertices = { nullptr };
+
+	/* 할당한 공간에 접근하여 값을 기록하낟. */
+	m_pVB->Lock(0, /*m_iNumVertices * m_iVertexStride*/0, reinterpret_cast<void**>(&pVertices), 0);
+
+	for (auto& pData : ListData)
+	{
+		_uint iIndex = pData.iVertexPositionZ * m_iNumVerticesX + pData.iVertexPositionX;
+		pVertices[iIndex].vPosition = m_pVertexPositions[iIndex] = pData.vPosition;
+	}
+
+	m_pVB->Unlock();
+
 	return S_OK;
 }
 

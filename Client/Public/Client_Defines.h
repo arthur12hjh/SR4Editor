@@ -2,6 +2,7 @@
 
 #include <process.h>
 #include "../Default/framework.h"
+
 #include "Client_Enum.h"
 
 namespace Client

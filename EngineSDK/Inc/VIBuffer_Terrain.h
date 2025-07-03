@@ -17,8 +17,11 @@ public:
 	virtual HRESULT Initialize(void* pArg) override;
 
 public:
+	virtual HRESULT Apply_TerrainData(list<Engine::TERRAINDATATYPE_DESC> pListData);
 	virtual _bool Picking(class CTransform* pTransform, _float3* pOut) override;
 
+private:
+	list<Engine::TERRAINDATATYPE_DESC> m_listData;
 
 public:
 	static CVIBuffer_Terrain* Create(LPDIRECT3DDEVICE9 pGraphic_Device, _uint iNumVerticesX, _uint iNumVerticesZ);

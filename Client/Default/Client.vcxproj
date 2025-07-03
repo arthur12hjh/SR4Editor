@@ -157,6 +157,7 @@
     <ClInclude Include="..\public\HpBar.h" />
     <ClInclude Include="..\public\HpFrame.h" />
     <ClInclude Include="..\Public\Client_Enum.h" />
+    <ClInclude Include="..\Public\ImGui_Manager.h" />
     <ClInclude Include="..\public\Inventory.h" />
     <ClInclude Include="..\Public\Level_Editor.h" />
     <ClInclude Include="..\Public\Level_GamePlay.h" />
@@ -172,6 +173,7 @@
     <ClInclude Include="..\public\Slot.h" />
     <ClInclude Include="..\Public\Snow.h" />
     <ClInclude Include="..\public\Terrain.h" />
+    <ClInclude Include="..\Public\TerrainVertexData.h" />
     <ClInclude Include="..\Public\TestLevelData.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="framework.h" />
@@ -191,6 +193,7 @@
     <ClCompile Include="..\private\HeartSymbol.cpp" />
     <ClCompile Include="..\private\HpBar.cpp" />
     <ClCompile Include="..\private\HpFrame.cpp" />
+    <ClCompile Include="..\Private\ImGui_Manager.cpp" />
     <ClCompile Include="..\private\Inventory.cpp" />
     <ClCompile Include="..\Private\Level_Editor.cpp" />
     <ClCompile Include="..\Private\Level_GamePlay.cpp" />
@@ -206,6 +209,7 @@
     <ClCompile Include="..\private\Slot.cpp" />
     <ClCompile Include="..\Private\Snow.cpp" />
     <ClCompile Include="..\private\Terrain.cpp" />
+    <ClCompile Include="..\Private\TerrainVertexData.cpp" />
     <ClCompile Include="..\Private\TestLevelData.cpp" />
     <ClCompile Include="Client.cpp" />
   </ItemGroup>

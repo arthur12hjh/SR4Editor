@@ -13,6 +13,7 @@ private:
 public:
 	HRESULT Initialize();
 	HRESULT ReadFile(list<_wstring>* strDataList, const _wstring& strFileTag);
+	HRESULT WriteFile(list<_wstring>* strDataList, const _wstring& strFileTag);
 
 
 public:

@@ -17,10 +17,12 @@ public:
 
 protected:
 	HRESULT ReadFile(const _wstring& strFileTag);
+	void WriteFile(const _wstring& strFileTag);
+
 
 protected:
 	list<_wstring>		m_listStrData = {};
-
+	_wstring*			m_pStrFileName = { nullptr };
 
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;
